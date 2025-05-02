@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PitStopApp</string>
+    <string name="home_screen_name">PitStop Home</string>
+    <string name="profile_screen_name">Profilo</string>
+    <string name="unknown_screen_name">Schermata Sconosciuta</string>
+    <string name="back_button_description">Vai Indietro</string>
+</resources>
