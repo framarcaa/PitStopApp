@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "Tracks")
 data class Track(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -26,4 +26,28 @@ data class Track(
 
     @ColumnInfo
     val country: String
+)
+
+@Entity(
+    tableName = "Users",
+    indices = [androidx.room.Index(value = ["email"], unique = true)]
+)
+data class User(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+
+    @ColumnInfo
+    val username: String,
+
+    @ColumnInfo
+    val email: String,
+
+    @ColumnInfo
+    val password: String,
+
+    @ColumnInfo
+    val profilePictureUri: String? = null,
+
+    @ColumnInfo
+    val location: String? = null
 )

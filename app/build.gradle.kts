@@ -42,6 +42,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.jbcrypt)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.play.services.location)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.androidx.core.ktx)

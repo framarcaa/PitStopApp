@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.navigation.NavHostController
+import com.example.pitstopapp.ui.composables.BottomBar
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -36,6 +37,9 @@ fun HomeScreen(navController: NavHostController) {
         topBar = {
             AppBar(navController)
         },
+        bottomBar = {
+            BottomBar(navController)
+        }
     ) { contentPadding ->
         Column(
             modifier = Modifier

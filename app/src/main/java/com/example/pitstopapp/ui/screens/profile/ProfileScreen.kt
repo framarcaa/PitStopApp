@@ -18,12 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.pitstopapp.ui.composables.AppBar
 import androidx.compose.ui.text.font.FontWeight
+import com.example.pitstopapp.ui.composables.BottomBar
 
 
 @Composable
 fun ProfileScreen(navController: NavHostController) {
     Scaffold (
-        topBar = { AppBar(navController) }
+        topBar = { AppBar(navController) },
+        bottomBar = { BottomBar(navController)}
     ) { contentPadding ->
         Column(
             modifier = Modifier

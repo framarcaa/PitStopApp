@@ -56,13 +56,6 @@ fun AppBar(navController: NavHostController) {
                     Icon(Icons.Outlined.Search, contentDescription = "Search", Modifier.size(30.dp))
                 }
             }
-            if (title != "Profile") {
-                IconButton(onClick = { navController.navigate(PitStopRoute.Profile) }) {
-                    //Account circle bigger icon
-                    Icon(Icons.Filled.AccountCircle, contentDescription = stringResource(R.string.profile_screen_name), Modifier.size(40.dp))
-                }
-            }
-
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,

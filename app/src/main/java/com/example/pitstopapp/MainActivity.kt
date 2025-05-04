@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.ui.PitStopNavGraph
 import com.example.pitstopapp.ui.composables.AppBar
 import com.example.pitstopapp.ui.screens.home.HomeScreen
@@ -24,8 +25,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             PitStopAppTheme {
                 val navController = rememberNavController()
-
-                PitStopNavGraph(navController)
+                val userRepository = UserRepository(application)
+                PitStopNavGraph(navController, userRepository)
             }
         }
     }
