@@ -16,22 +16,22 @@ import androidx.navigation.NavHostController
 import com.example.pitstopapp.ui.PitStopRoute
 
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun BottomBar(navController: NavHostController, username: String) {
     BottomAppBar (
         modifier = Modifier.height(70.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         content = {
             IconButton(
-                onClick = { navController.navigate(PitStopRoute.Home) {
-                    popUpTo(PitStopRoute.Home) { inclusive = true }
+                onClick = { navController.navigate("${PitStopRoute.Home}/$username") {
+                    popUpTo("${PitStopRoute.Home}/$username") { inclusive = true }
                 } },
                 modifier = Modifier.weight(1f)
             ) {
                 Icon(Icons.Filled.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.onSurface)
             }
             IconButton(
-                onClick = { navController.navigate(PitStopRoute.Profile) {
-                    popUpTo(PitStopRoute.Profile) { inclusive = true }
+                onClick = { navController.navigate("${PitStopRoute.Profile}/$username") {
+                    popUpTo("${PitStopRoute.Profile}/$username") { inclusive = true }
                 } },
                 modifier = Modifier.weight(1f)
             ) {

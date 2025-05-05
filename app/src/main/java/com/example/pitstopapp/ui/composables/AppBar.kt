@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.Person
@@ -31,8 +33,8 @@ import com.example.pitstopapp.ui.PitStopRoute
 fun AppBar(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val title = when {
-        backStackEntry?.destination?.hasRoute<PitStopRoute.Home>() == true -> stringResource(R.string.home_screen_name)
-        backStackEntry?.destination?.hasRoute<PitStopRoute.Profile>() == true -> stringResource(R.string.profile_screen_name)
+        backStackEntry?.destination?.route?.startsWith(PitStopRoute.Home.toString()) == true -> stringResource(R.string.home_screen_name)
+        backStackEntry?.destination?.route?.startsWith(PitStopRoute.Profile.toString()) == true -> stringResource(R.string.profile_screen_name)
         else -> "Unknown Screen"
     }
 
@@ -41,26 +43,40 @@ fun AppBar(navController: NavHostController) {
             Text(
                 text = title,
                 fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         },
         navigationIcon = {
-            if (navController.previousBackStackEntry != null) {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.back_button_description))
+            if (title == stringResource(R.string.profile_screen_name)) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        Icons.Filled.ArrowBackIosNew,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         },
         actions = {
-            if (title == "PitStopApp") {
+            if (title == stringResource(R.string.home_screen_name)) {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(Icons.Outlined.Search, contentDescription = "Search", Modifier.size(30.dp))
                 }
             }
+            if (title == stringResource(R.string.profile_screen_name)) {
+                IconButton(onClick = { /*navController.navigate("leaderboard_screen/$username") */}) {
+                    Icon(
+                        Icons.Filled.Leaderboard,
+                        contentDescription = "Classifica",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = MaterialTheme.colorScheme.primary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
         )
     )
 }
