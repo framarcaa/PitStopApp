@@ -29,16 +29,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.navigation.NavHostController
+import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.ui.composables.BottomBar
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, userRepository: UserRepository, username: String) {
     Scaffold (
         topBar = {
             AppBar(navController)
         },
         bottomBar = {
-            BottomBar(navController)
+            BottomBar(navController, username)
         }
     ) { contentPadding ->
         Column(
@@ -49,7 +50,7 @@ fun HomeScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "My Tracks",
+                username,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(16.dp)

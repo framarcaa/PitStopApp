@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.coil.compose)
     implementation(libs.jbcrypt)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.play.services.location)

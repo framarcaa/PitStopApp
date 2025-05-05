@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.LoginResult
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
+import com.example.pitstopapp.ui.PitStopRoute
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -136,7 +137,7 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Login to PistStopApp", style = MaterialTheme.typography.headlineSmall)
+        Text(text = "Login to PitStopApp", style = MaterialTheme.typography.headlineSmall)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -178,7 +179,7 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
             color = Color.Blue,
             modifier = Modifier
                 .clickable {
-                    navController.navigate("registration")
+                    navController.navigate(PitStopRoute.Register)
                 }
         )
     }
