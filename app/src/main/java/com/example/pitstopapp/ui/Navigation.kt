@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.pitstopapp.data.database.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.ui.screens.home.HomeScreen
 import com.example.pitstopapp.ui.screens.login.LoginScreen
@@ -25,6 +26,7 @@ sealed interface PitStopRoute {
 fun PitStopNavGraph(
     navController: NavHostController,
     userRepository: UserRepository,
+    trackRepository: TrackRepository,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -58,8 +60,8 @@ fun PitStopNavGraph(
                 navController = navController,
                 userRepository = userRepository,
                 username = username,
-                /*TrackRepository = TrackRepository,
-                filter = "",
+                trackRepository = trackRepository
+                /*filter = "",
                 onTrackClick = { track ->
                     navController.navigate("details/${track.id}/$username")*/
 

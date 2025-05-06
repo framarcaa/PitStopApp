@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -25,15 +27,82 @@ import androidx.compose.ui.unit.dp
 import com.example.pitstopapp.data.database.Track
 import com.example.pitstopapp.ui.composables.AppBar
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.pitstopapp.data.database.TrackRepository
+import com.example.pitstopapp.data.database.User
 import com.example.pitstopapp.data.repositories.UserRepository
+import com.example.pitstopapp.data.repositories.UserRepositoryInterface
 import com.example.pitstopapp.ui.composables.BottomBar
+import com.example.pitstopapp.ui.composables.TrackCard
 
 @Composable
-fun HomeScreen(navController: NavHostController, userRepository: UserRepository, username: String) {
+fun HomeScreen(
+    navController: NavHostController,
+    userRepository: UserRepository,
+    trackRepository: TrackRepository,
+    username: String
+) {
+    var searchQuery by remember { mutableStateOf("") }
+    var trackList by remember { mutableStateOf<List<Track>>(emptyList()) }
+    var userId by remember { mutableStateOf("") }
+    var showFavorites by remember { mutableStateOf(false) }
+
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+    fun showTrackList() {
+        if (userId.isNotEmpty()) {
+            when {
+                searchQuery.isNotEmpty() -> {
+                    trackRepository.searchByName(searchQuery, object : UserRepositoryInterface.Callback<List<Track>> {
+                        override fun onResult(result: List<Track>) {
+                            trackList = result
+                        }
+                    })
+                }
+                /*showFavorites -> {
+                    trackRepository.getFavouriteTracksByUser(userId, object : UserRepositoryInterface.Callback<List<Track>> {
+                        override fun onResult(result: List<Track>) {
+                            trackList = result.filter { it.category.equals(selectedFilter, ignoreCase = true) || selectedFilter.isEmpty() }
+                                .sortedByDescending { it.insertedDate }
+                        }
+                    })
+                }*/
+                else -> {
+                    trackRepository.getAllTracks(object : UserRepositoryInterface.Callback<List<Track>> {
+                        override fun onResult(result: List<Track>) {
+                            trackList = result
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        userRepository.getUserByUsername(username, object : UserRepositoryInterface.Callback<User?> {
+            override fun onResult(result: User?) {
+                result?.let {
+                    userId = it.username
+                    showTrackList()
+                }
+            }
+        })
+    }
+
+
     Scaffold (
         topBar = {
             AppBar(navController)
@@ -45,37 +114,47 @@ fun HomeScreen(navController: NavHostController, userRepository: UserRepository,
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(contentPadding)
+                .padding(16.dp)
         ) {
-            Text(
-                username,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(16.dp)
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                placeholder = { Text("Cerca circuito...") },
+                shape = RoundedCornerShape(10.dp)
             )
-        }
-        /*if (state.trips.isNotEmpty()) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
-                modifier =  Modifier.padding(contentPadding)
-            ) {
 
-                items(state.tracks) { item ->
-                    TrackItem(
-                        item,
-                        onClick = {  }
+            // Numero di circuiti trovati
+            Text(
+                text = "Trovati ${trackList.size} circuiti(s)",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                items(trackList) { track ->
+                    TrackCard(
+                        track = track,
+                        onDetailsClick = { /*selectedTrack -> onTrackClick(selectedTrack)*/ },
+                        trackRepository = trackRepository,
+                        userId = userId
                     )
                 }
-
             }
-        } else {
-            NoItemsPlaceholder(Modifier.padding(contentPadding))
-        }*/
+
+        }
     }
 }
 
