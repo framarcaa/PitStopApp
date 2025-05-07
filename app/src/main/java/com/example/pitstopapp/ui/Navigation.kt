@@ -12,6 +12,8 @@ import com.example.pitstopapp.ui.screens.home.HomeScreen
 import com.example.pitstopapp.ui.screens.login.LoginScreen
 import com.example.pitstopapp.ui.screens.login.RegistrationScreen
 import com.example.pitstopapp.ui.screens.profile.ProfileScreen
+import com.example.pitstopapp.ui.screens.settings.SettingsScreen
+import com.example.pitstopapp.ui.theme.PitStopAppTheme
 import kotlinx.serialization.Serializable
 
 sealed interface PitStopRoute {
@@ -27,6 +29,9 @@ fun PitStopNavGraph(
     navController: NavHostController,
     userRepository: UserRepository,
     trackRepository: TrackRepository,
+    isDarkTheme: Boolean,
+    onThemeChange: (Boolean) -> Unit,
+    onUsernameChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -35,37 +40,46 @@ fun PitStopNavGraph(
         modifier = modifier
     ) {
         composable<PitStopRoute.Login> {
-            LoginScreen(navController, userRepository)
+            PitStopAppTheme(darkTheme = false) {
+                LoginScreen(navController, userRepository)
+            }
         }
 
         composable<PitStopRoute.Register> {
-            RegistrationScreen(navController, userRepository)
+            PitStopAppTheme(darkTheme = false) {
+                RegistrationScreen(navController, userRepository)
+            }
         }
 
-        /*composable<PitStopRoute.Home> {
-            HomeScreen(navController, userRepository)
-        }*/
         composable("${PitStopRoute.Profile}/{username}") { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "unknown"
-            ProfileScreen(navController, userRepository, username, LocalContext.current)
+            PitStopAppTheme(darkTheme = isDarkTheme) {
+                ProfileScreen(navController, userRepository, username, LocalContext.current)
+            }
+
         }
 
-        composable<PitStopRoute.Settings> {
-            // SettingsScreen(navController)
+        composable("${PitStopRoute.Settings}/{username}") { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: "unknown"
+            PitStopAppTheme(darkTheme = isDarkTheme) {
+                SettingsScreen(navController, onThemeChange, isDarkTheme, username)
+            }
         }
 
         composable("${PitStopRoute.Home}/{username}") { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "unknown"
-            HomeScreen(
-                navController = navController,
-                userRepository = userRepository,
-                username = username,
-                trackRepository = trackRepository
-                /*filter = "",
-                onTrackClick = { track ->
-                    navController.navigate("details/${track.id}/$username")*/
+            PitStopAppTheme(darkTheme = isDarkTheme) {
+                HomeScreen(
+                    navController = navController,
+                    userRepository = userRepository,
+                    username = username,
+                    trackRepository = trackRepository
+                    /*filter = "",
+                    onTrackClick = { track ->
+                        navController.navigate("details/${track.id}/$username")*/
 
-            )
+                )
+            }
         }
     }
 }

@@ -52,7 +52,7 @@ fun TrackCard(
             .padding(8.dp),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        /*Box(modifier = Modifier.fillMaxWidth()) {
             Row(modifier = Modifier.padding(16.dp)) {
                 val context = LocalContext.current
                 val imageName = track.imageUri
@@ -86,20 +86,25 @@ fun TrackCard(
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Gray
                     )
+                    Text(
+                        text = "Lunghezza: ${track.length} m",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Button(onClick = { /*onDetailsClick(track)*/ }) {
+                        Button(onClick = { *//*onDetailsClick(track)*//* }) {
                             Text("Vedi dettagli")
                         }
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            /*Icon(
+                            *//*Icon(
                                 painter = painterResource(
                                     id = if (isStarred) R.drawable.ic_favorite_filled else R.drawable.ic_favorite
                                 ),
@@ -111,8 +116,65 @@ fun TrackCard(
                                         isStarred = newState
                                         trackRepository.updateFavouriteStatus(track.id, userId, newState)
                                     }
-                            )*/
+                            )*//*
                         }
+                    }
+                }
+            }
+        }*/
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // Parte superiore con immagine a tutta larghezza
+            val context = LocalContext.current
+            val imageName = track.imageUri
+            val imageResId = remember(imageName) {
+                context.resources.getIdentifier(imageName, "drawable", context.packageName)
+            }
+            val imagePainter = rememberAsyncImagePainter(model = imageResId)
+
+            Image(
+                painter = imagePainter,
+                contentDescription = "Track Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp) // o la metà dell'altezza prevista della card
+            )
+
+            // Parte inferiore con dettagli
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)) {
+                Text(
+                    text = track.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Descrizione: ${track.description}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "Lunghezza: ${track.length} m",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(onClick = { /*onDetailsClick(track)*/ }) {
+                        Text("Vedi dettagli")
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Qui puoi reinserire l'icona preferita se vuoi
                     }
                 }
             }

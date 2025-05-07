@@ -9,6 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
@@ -18,18 +24,46 @@ import com.example.pitstopapp.ui.PitStopNavGraph
 import com.example.pitstopapp.ui.composables.AppBar
 import com.example.pitstopapp.ui.screens.home.HomeScreen
 import com.example.pitstopapp.ui.theme.PitStopAppTheme
+import com.example.pitstopapp.utils.ThemeManager
 
 class MainActivity : ComponentActivity() {
+    private lateinit var themeManager: ThemeManager
+    private var currentUsername: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val userRepository = UserRepository(application)
+        val trackRepository = TrackRepository(application)
+        themeManager = ThemeManager(applicationContext)
+
         setContent {
-            PitStopAppTheme {
-                val navController = rememberNavController()
-                val userRepository = UserRepository(application)
-                val trackRepository = TrackRepository(application)
-                PitStopNavGraph(navController, userRepository, trackRepository)
+
+            val navController = rememberNavController()
+            var username by remember { mutableStateOf<String?>(null) }
+            val themeState = themeManager.isDarkThemeForUser(username ?: "").collectAsState(initial = false)
+            val isDarkTheme = themeState.value
+
+            DisposableEffect(Unit) {
+                onDispose {
+                    currentUsername = username
+                }
             }
+            PitStopNavGraph(
+                navController,
+                userRepository,
+                trackRepository,
+                isDarkTheme,
+                onThemeChange = { newTheme ->
+                    username?.let { currentUser ->
+                        themeManager.setDarkTheme(currentUser, newTheme)
+                    }
+                },
+                onUsernameChange = { newUsername ->
+                    username = newUsername
+                }
+            )
         }
     }
 }

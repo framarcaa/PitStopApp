@@ -38,9 +38,9 @@ fun BottomBar(navController: NavHostController, username: String) {
                 Icon(Icons.Filled.AccountCircle, contentDescription = "Profile", tint = MaterialTheme.colorScheme.onSurface)
             }
             IconButton(
-                onClick = { /*navController.navigate(PitStopRoute.Settings) {
-                    popUpTo(PitStopRoute.Settings) { inclusive = true }
-                }*/},
+                onClick = { navController.navigate("${PitStopRoute.Settings}/$username") {
+                    popUpTo("${PitStopRoute.Settings}/$username") { inclusive = true }
+                }},
                 modifier = Modifier.weight(1f)
             ) {
                 Icon(Icons.Filled.Settings, contentDescription = "Settings", tint = MaterialTheme.colorScheme.onSurface)

@@ -2,6 +2,7 @@
     <string name="app_name">PitStopApp</string>
     <string name="home_screen_name">PitStop Home</string>
     <string name="profile_screen_name">Profile</string>
+    <string name="settings_screen_name">Settings</string>
     <string name="unknown_screen_name">Unknown Screen</string>
     <string name="back_button_description">Go Back</string>
 </resources>
