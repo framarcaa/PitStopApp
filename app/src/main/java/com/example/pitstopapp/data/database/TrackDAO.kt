@@ -8,9 +8,9 @@ interface TrackDAO {
     @Query("SELECT * FROM Tracks")
     suspend fun getAllTracks(): List<Track>
 
-    @Query("SELECT * FROM Tracks WHERE id = :trackId LIMIT 1")
-    suspend fun getTrackById(trackId: String): Track?
+    @Query("SELECT * FROM Tracks WHERE id = :trackId")
+    suspend fun getTrackById(trackId: Int): Track?
 
-    @Query("SELECT * FROM Tracks WHERE name LIKE :query")
+    @Query("SELECT * FROM Tracks WHERE name LIKE :query || '%' ORDER BY name ASC")
     suspend fun searchByName(query: String): List<Track>
 }

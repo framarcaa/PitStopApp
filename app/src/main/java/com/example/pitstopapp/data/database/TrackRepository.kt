@@ -24,7 +24,7 @@ class TrackRepository(application: Application) : TrackRepositoryInterface {
         }
     }
 
-    override fun getTrackById(trackId: String, callback: UserRepositoryInterface.Callback<Track?>) {
+    override fun getTrackById(trackId: Int, callback: UserRepositoryInterface.Callback<Track?>) {
         CoroutineScope(Dispatchers.IO).launch {
             val track = trackDAO.getTrackById(trackId)
             withContext(Dispatchers.Main) {

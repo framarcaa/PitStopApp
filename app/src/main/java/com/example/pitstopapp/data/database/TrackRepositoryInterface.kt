@@ -5,7 +5,7 @@ import com.example.pitstopapp.data.repositories.UserRepositoryInterface
 interface TrackRepositoryInterface {
     fun getAllTracks(callback: UserRepositoryInterface.Callback<List<Track>>)
 
-    fun getTrackById(trackId: String, callback: UserRepositoryInterface.Callback<Track?>)
+    fun getTrackById(trackId: Int, callback: UserRepositoryInterface.Callback<Track?>)
 
     fun searchByName(query: String, callback: UserRepositoryInterface.Callback<List<Track>>)
 }

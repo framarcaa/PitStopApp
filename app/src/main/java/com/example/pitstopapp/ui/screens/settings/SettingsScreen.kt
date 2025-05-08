@@ -29,9 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.pitstopapp.ui.composables.AppBar
 import com.example.pitstopapp.ui.composables.BottomBar
-import kotlin.math.log
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
@@ -40,60 +38,31 @@ fun SettingsScreen(
     username: String
 ) {
     Scaffold(
-        topBar = {
-            AppBar(navController)
-            TopAppBar(
-                title = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Impostazioni",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            )
-        },
-        bottomBar = { BottomBar(navController, username) },
-        content = { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start
+        topBar = { AppBar(navController) },
+        bottomBar = { BottomBar(navController, username) }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Tema Scuro - ${username}",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Switch(
-                        checked = isDarkTheme,
-                        onCheckedChange = {  }
-                    )
-                }
+                Text(
+                    text = "Tema Scuro",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Switch(
+                    checked = isDarkTheme,
+                    onCheckedChange = onThemeToggle
+                )
             }
         }
-    )
+    }
 }

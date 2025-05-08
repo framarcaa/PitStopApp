@@ -6,8 +6,11 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,7 +73,7 @@ fun AppBar(navController: NavHostController) {
         actions = {
             if (title == stringResource(R.string.home_screen_name)) {
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(Icons.Outlined.Search, contentDescription = "Search", Modifier.size(30.dp))
+                    Icon(Icons.Outlined.StarOutline, contentDescription = "Favourite", Modifier.size(30.dp))
                 }
             }
             if (title == stringResource(R.string.profile_screen_name)) {

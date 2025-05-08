@@ -53,6 +53,7 @@ fun HomeScreen(
     navController: NavHostController,
     userRepository: UserRepository,
     trackRepository: TrackRepository,
+    onTrackClick: (Track) -> Unit,
     username: String
 ) {
     var searchQuery by remember { mutableStateOf("") }
@@ -102,6 +103,12 @@ fun HomeScreen(
         })
     }
 
+    LaunchedEffect(searchQuery, showFavorites) {
+        if (userId.isNotEmpty()) {
+            showTrackList()
+        }
+    }
+
 
     Scaffold (
         topBar = {
@@ -147,7 +154,7 @@ fun HomeScreen(
                 items(trackList) { track ->
                     TrackCard(
                         track = track,
-                        onDetailsClick = { /*selectedTrack -> onTrackClick(selectedTrack)*/ },
+                        onDetailsClick = { selectedTrack -> onTrackClick(selectedTrack) },
                         trackRepository = trackRepository,
                         userId = userId
                     )

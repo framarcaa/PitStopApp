@@ -22,7 +22,7 @@ class ThemeManager(context: Context) {
         return sharedPreferences.getBoolean("${THEME_KEY_PREFIX}$username", false)
     }
 
-    fun setDarkTheme(username: String, isDark: Boolean) {
+    suspend fun setDarkTheme(username: String, isDark: Boolean) {
         sharedPreferences.edit().putBoolean("${THEME_KEY_PREFIX}$username", isDark).apply()
         _currentThemeFlow.value = isDark
     }

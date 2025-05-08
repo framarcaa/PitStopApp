@@ -11,10 +11,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarOutline
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,9 +47,7 @@ fun TrackCard(
     trackRepository: TrackRepository,
     userId: String
 ) {
-    /*var isStarred by remember(track.id) {
-        mutableStateOf(track.favourite)
-    }*/
+
 
     Card(
         modifier = modifier
@@ -52,76 +55,6 @@ fun TrackCard(
             .padding(8.dp),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
-        /*Box(modifier = Modifier.fillMaxWidth()) {
-            Row(modifier = Modifier.padding(16.dp)) {
-                val context = LocalContext.current
-                val imageName = track.imageUri
-
-                val imageResId = remember(imageName) {
-                    context.resources.getIdentifier(imageName, "drawable", context.packageName)
-                }
-                val imagePainter = rememberAsyncImagePainter(
-                    model = imageResId
-                )
-                Image(
-                    painter = imagePainter,
-                    contentDescription = "Track Image",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .padding(end = 16.dp)
-                )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterVertically)
-                ) {
-                    Text(
-                        text = track.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Descrizione: ${track.description}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                    Text(
-                        text = "Lunghezza: ${track.length} m",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(onClick = { *//*onDetailsClick(track)*//* }) {
-                            Text("Vedi dettagli")
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            *//*Icon(
-                                painter = painterResource(
-                                    id = if (isStarred) R.drawable.ic_favorite_filled else R.drawable.ic_favorite
-                                ),
-                                contentDescription = if (isStarred) "Favourite filled" else "Favourite",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clickable {
-                                        val newState = !isStarred
-                                        isStarred = newState
-                                        trackRepository.updateFavouriteStatus(track.id, userId, newState)
-                                    }
-                            )*//*
-                        }
-                    }
-                }
-            }
-        }*/
         Column(modifier = Modifier.fillMaxWidth()) {
             // Parte superiore con immagine a tutta larghezza
             val context = LocalContext.current
@@ -166,7 +99,7 @@ fun TrackCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Button(onClick = { /*onDetailsClick(track)*/ }) {
+                    Button(onClick = { onDetailsClick(track) }) {
                         Text("Vedi dettagli")
                     }
 
@@ -174,7 +107,20 @@ fun TrackCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Qui puoi reinserire l'icona preferita se vuoi
+                        IconButton(onClick = {}) {
+                            Icon(Icons.Outlined.StarOutline, contentDescription = "Star")
+                        }
+                        /*Icon(
+                            if(isStar) Icons.Filled.Star else Icons.Outlined.StarOutline,
+                            contentDescription = if (isStar) "Favourite filled" else "Favourite",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable {
+                                    val newState = !isStar
+                                    isStar = newState
+                                    trackRepository.updateFavouriteStatus(track.id, userId, newState)
+                                }
+                        )*/
                     }
                 }
             }

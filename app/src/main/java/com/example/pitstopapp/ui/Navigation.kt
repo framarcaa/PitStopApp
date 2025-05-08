@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.pitstopapp.data.database.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepository
+import com.example.pitstopapp.ui.screens.TrackDetailsScreen
 import com.example.pitstopapp.ui.screens.home.HomeScreen
 import com.example.pitstopapp.ui.screens.login.LoginScreen
 import com.example.pitstopapp.ui.screens.login.RegistrationScreen
@@ -22,6 +23,7 @@ sealed interface PitStopRoute {
     @Serializable data object Home : PitStopRoute
     @Serializable data object Profile : PitStopRoute
     @Serializable data object Settings : PitStopRoute
+    @Serializable data object Details : PitStopRoute
 }
 
 @Composable
@@ -34,6 +36,12 @@ fun PitStopNavGraph(
     onUsernameChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    navController.addOnDestinationChangedListener { _, _, arguments ->
+        arguments?.getString("username")?.let { username ->
+            onUsernameChange(username)
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = PitStopRoute.Login,
@@ -62,7 +70,12 @@ fun PitStopNavGraph(
         composable("${PitStopRoute.Settings}/{username}") { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "unknown"
             PitStopAppTheme(darkTheme = isDarkTheme) {
-                SettingsScreen(navController, onThemeChange, isDarkTheme, username)
+                SettingsScreen(
+                    navController = navController,
+                    onThemeToggle = onThemeChange,
+                    isDarkTheme = isDarkTheme,
+                    username = username
+                )
             }
         }
 
@@ -73,12 +86,19 @@ fun PitStopNavGraph(
                     navController = navController,
                     userRepository = userRepository,
                     username = username,
-                    trackRepository = trackRepository
-                    /*filter = "",
+                    trackRepository = trackRepository,
                     onTrackClick = { track ->
-                        navController.navigate("details/${track.id}/$username")*/
-
+                        navController.navigate("details/${track.id}/$username")
+                    }
                 )
+            }
+        }
+
+        composable("${PitStopRoute.Details}/{trackId}/{username}") { backStackEntry ->
+            val trackId = backStackEntry.arguments?.getString("trackId") ?: "unknown"
+            val username = backStackEntry.arguments?.getString("username") ?: "unknown"
+            PitStopAppTheme(darkTheme = isDarkTheme) {
+                TrackDetailsScreen(navController, trackId, username, trackRepository)
             }
         }
     }
