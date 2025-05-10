@@ -39,6 +39,7 @@ fun AppBar(navController: NavHostController) {
         backStackEntry?.destination?.route?.startsWith(PitStopRoute.Home.toString()) == true -> stringResource(R.string.home_screen_name)
         backStackEntry?.destination?.route?.startsWith(PitStopRoute.Profile.toString()) == true -> stringResource(R.string.profile_screen_name)
         backStackEntry?.destination?.route?.startsWith(PitStopRoute.Settings.toString()) == true -> stringResource(R.string.settings_screen_name)
+        backStackEntry?.destination?.route?.startsWith(PitStopRoute.Details.toString()) == true -> stringResource(R.string.details_screen_name)
         else -> "Unknown Screen"
     }
 
@@ -60,7 +61,8 @@ fun AppBar(navController: NavHostController) {
                     )
                 }
             }
-            if(title == stringResource(R.string.settings_screen_name)) {
+            if(title == stringResource(R.string.settings_screen_name) ||
+                title == stringResource(R.string.details_screen_name)){
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         Icons.Filled.ArrowBackIosNew,

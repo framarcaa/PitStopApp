@@ -1,5 +1,6 @@
 package com.example.pitstopapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.Track
 import com.example.pitstopapp.data.database.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
@@ -44,16 +46,17 @@ fun TrackDetailsScreen(
     trackRepository: TrackRepository
 ) {
     var track by remember { mutableStateOf<Track?>(null) }
-    fun getTrackById(trackId: String): Track? {
+    fun getTrackById(trackId: Int) : Track? {
         trackRepository.getTrackById(trackId.toInt(), object : UserRepositoryInterface.Callback<Track?> {
             override fun onResult(result: Track?) {
                 track = result
             }
         })
+        return track
     }
 
     LaunchedEffect(trackId) {
-        track = trackRepository.getTrackById(trackId.toInt())
+        track = getTrackById(trackId.toInt())
     }
 
     Scaffold (
@@ -63,21 +66,25 @@ fun TrackDetailsScreen(
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)) {
-
+            .padding(padding))
+        {
             Text(
                 text = track?.name ?: "Circuito non trovato",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(10.dp),
                 textAlign = TextAlign.Center
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
             val context = LocalContext.current
             val imageName = track?.imageUri
-            val imageResId = remember(imageName) {
+            val imageResId = if (imageName != null) {
                 context.resources.getIdentifier(imageName, "drawable", context.packageName)
+            } else {
+                R.drawable.logo // Sostituisci con un'immagine predefinita
             }
             val imagePainter = rememberAsyncImagePainter(model = imageResId)
 
@@ -94,13 +101,14 @@ fun TrackDetailsScreen(
             Text(
                 text = track?.description ?: "Descrizione non disponibile",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(16.dp)
             )
 
             Text(
-                text = "Lunghezza: %.3f km".format(track?.length ?: 0.0),
+                text = "Lunghezza: ${track?.length ?: 0} m",
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(16.dp)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -108,7 +116,7 @@ fun TrackDetailsScreen(
             Text(
                 text = "Mappa del percorso",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(16.dp)
             )
 
             // Mappa usando Google Maps Compose

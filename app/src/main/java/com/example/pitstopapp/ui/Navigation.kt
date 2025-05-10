@@ -88,7 +88,7 @@ fun PitStopNavGraph(
                     username = username,
                     trackRepository = trackRepository,
                     onTrackClick = { track ->
-                        navController.navigate("details/${track.id}/$username")
+                        navController.navigate("${PitStopRoute.Details}/${track.id}/$username")
                     }
                 )
             }

@@ -6,4 +6,5 @@
     <string name="settings_screen_name">Impostazioni</string>
     <string name="unknown_screen_name">Schermata Sconosciuta</string>
     <string name="back_button_description">Vai Indietro</string>
+    <string name="details_screen_name">Dettaglia circuito</string>
 </resources>
