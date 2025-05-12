@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Tracks")
 data class Track(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "Id")
     val id: Int = 0,
 
     @ColumnInfo
@@ -34,6 +35,7 @@ data class Track(
 )
 data class User(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "Id")
     val id: Int = 0,
 
     @ColumnInfo

@@ -1,7 +1,9 @@
-package com.example.pitstopapp.data.database
+package com.example.pitstopapp.data.repositories
 
 import android.app.Application
-import com.example.pitstopapp.data.repositories.UserRepositoryInterface
+import com.example.pitstopapp.data.database.Track
+import com.example.pitstopapp.data.database.TrackDAO
+import com.example.pitstopapp.data.database.UserDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

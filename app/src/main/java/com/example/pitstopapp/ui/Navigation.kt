@@ -6,7 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.pitstopapp.data.database.TrackRepository
+import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.ui.screens.TrackDetailsScreen
 import com.example.pitstopapp.ui.screens.home.HomeScreen

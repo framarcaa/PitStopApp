@@ -1,6 +1,5 @@
 package com.example.pitstopapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,17 +22,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.Track
-import com.example.pitstopapp.data.database.TrackRepository
+import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
 import com.example.pitstopapp.ui.composables.AppBar
 import com.example.pitstopapp.ui.composables.BottomBar

@@ -1,5 +1,5 @@
 package com.example.pitstopapp.data.database
-
+/*
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
@@ -10,4 +10,4 @@ import androidx.room.RoomDatabase
 abstract class AppDatabase : RoomDatabase() {
     abstract fun trackDao(): TrackDAO
     abstract fun userDao(): UserDAO
-}
+}*/

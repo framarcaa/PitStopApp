@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [Track::class, User::class],
     version = 10,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class UserDatabase : RoomDatabase() {
     abstract fun userDAO(): UserDAO
@@ -24,7 +24,7 @@ abstract class UserDatabase : RoomDatabase() {
                     context.applicationContext,
                     UserDatabase::class.java,
                     "user_database"
-                ).build()
+                ).createFromAsset("user_database.db").build()
                 INSTANCE = instance
                 instance
             }

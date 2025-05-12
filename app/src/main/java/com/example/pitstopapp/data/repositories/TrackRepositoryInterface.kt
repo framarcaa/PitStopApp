@@ -1,6 +1,6 @@
-package com.example.pitstopapp.data.database
+package com.example.pitstopapp.data.repositories
 
-import com.example.pitstopapp.data.repositories.UserRepositoryInterface
+import com.example.pitstopapp.data.database.Track
 
 interface TrackRepositoryInterface {
     fun getAllTracks(callback: UserRepositoryInterface.Callback<List<Track>>)
