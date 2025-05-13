@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.example.pitstopapp.data.repositories.LapTimeRepository
 import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.ui.PitStopNavGraph
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
 
         val userRepository = UserRepository(application)
         val trackRepository = TrackRepository(application)
+        val lapTimeRepository = LapTimeRepository(application)
         themeManager = ThemeManager(applicationContext)
 
         setContent {
@@ -47,6 +49,7 @@ class MainActivity : ComponentActivity() {
                 navController,
                 userRepository,
                 trackRepository,
+                lapTimeRepository,
                 isDarkTheme,
                 onThemeChange = { newTheme ->
                     Log.d("MainActivity", "Setting theme for user: $username to $newTheme")

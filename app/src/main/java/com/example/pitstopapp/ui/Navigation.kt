@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.pitstopapp.data.repositories.LapTimeRepository
 import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.ui.screens.TrackDetailsScreen
@@ -31,6 +32,7 @@ fun PitStopNavGraph(
     navController: NavHostController,
     userRepository: UserRepository,
     trackRepository: TrackRepository,
+    lapTimeRepository: LapTimeRepository,
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
     onUsernameChange: (String) -> Unit,
@@ -98,7 +100,7 @@ fun PitStopNavGraph(
             val trackId = backStackEntry.arguments?.getString("trackId") ?: "unknown"
             val username = backStackEntry.arguments?.getString("username") ?: "unknown"
             PitStopAppTheme(darkTheme = isDarkTheme) {
-                TrackDetailsScreen(navController, trackId, username, trackRepository)
+                TrackDetailsScreen(navController, trackId, username, trackRepository, lapTimeRepository)
             }
         }
     }

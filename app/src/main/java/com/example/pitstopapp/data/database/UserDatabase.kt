@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Track::class, User::class],
+    entities = [Track::class, User::class, LapTime::class],
     version = 10,
     exportSchema = true
 )
 abstract class UserDatabase : RoomDatabase() {
     abstract fun userDAO(): UserDAO
     abstract fun trackDAO(): TrackDAO
+    abstract fun lapTimeDAO(): LapTimeDAO
 
     companion object {
         @Volatile

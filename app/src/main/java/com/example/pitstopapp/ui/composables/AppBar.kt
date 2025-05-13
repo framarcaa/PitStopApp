@@ -78,7 +78,7 @@ fun AppBar(navController: NavHostController) {
                     Icon(Icons.Outlined.StarOutline, contentDescription = "Favourite", Modifier.size(30.dp))
                 }
             }
-            if (title == stringResource(R.string.profile_screen_name)) {
+            if (title == stringResource(R.string.details_screen_name)) {
                 IconButton(onClick = { /*navController.navigate("leaderboard_screen/$username") */}) {
                     Icon(
                         Icons.Filled.Leaderboard,
