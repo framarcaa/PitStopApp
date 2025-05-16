@@ -2,6 +2,8 @@ package com.example.pitstopapp.ui.screens
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +45,8 @@ import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
 import com.example.pitstopapp.ui.composables.AppBar
 import com.example.pitstopapp.ui.composables.BottomBar
+import com.example.pitstopapp.ui.composables.HeaderRow
+import com.example.pitstopapp.ui.composables.LapTimeRow
 import com.example.pitstopapp.ui.composables.TrackTimesList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
@@ -57,6 +62,7 @@ fun TrackDetailsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     var track by remember { mutableStateOf<Track?>(null) }
+    var times by remember { mutableStateOf<List<LapTime>>(emptyList()) }
     fun getTrackById(trackId: Int) : Track? {
         trackRepository.getTrackById(trackId, object : UserRepositoryInterface.Callback<Track?> {
             override fun onResult(result: Track?) {
@@ -65,9 +71,18 @@ fun TrackDetailsScreen(
         })
         return track
     }
+    suspend fun getLapTimesByTrackId(trackId: Int): List<LapTime> {
+        lapTimeRepository.getLapTimesByTrackId(trackId, object : UserRepositoryInterface.Callback<List<LapTime>> {
+            override fun onResult(result: List<LapTime>) {
+                times = result
+            }
+        })
+        return times
+    }
 
     LaunchedEffect(trackId) {
         track = getTrackById(trackId.toInt())
+        times = getLapTimesByTrackId(trackId.toInt())
     }
 
     Scaffold (
@@ -124,6 +139,14 @@ fun TrackDetailsScreen(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
+
+                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                    HeaderRow()
+                    times.forEachIndexed { index, lapTime ->
+                        LapTimeRow(index + 1, lapTime)
+                    }
+                }
+
                 Text(
                     text = "Mappa del percorso",
                     style = MaterialTheme.typography.titleMedium,
@@ -131,26 +154,26 @@ fun TrackDetailsScreen(
                 )
 
                 // Mappa usando Google Maps Compose
-                Box(
+                /*Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(250.dp)
                         .clip(RoundedCornerShape(12.dp))
                 ) {
-                    /*GoogleMap(
+                    GoogleMap(
                         modifier = Modifier.matchParentSize(),
                         cameraPositionState = rememberCameraPositionState {
                             position = CameraPosition.fromLatLngZoom(location, 14f)
                         }
                     ) {
                         Marker(position = location, title = title)
-                    }*/
-                }
+                    }
+                }*/
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 val lapTimeTMP = LapTime(
-                    userId = 1,
+                    userId = 2,
                     trackId = 1,
                     lapTime = "1.56"
                 )
@@ -172,3 +195,4 @@ fun TrackDetailsScreen(
         }
     }
 }
+
