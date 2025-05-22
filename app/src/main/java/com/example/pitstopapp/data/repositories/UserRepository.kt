@@ -138,4 +138,13 @@ class UserRepository(application: Application) : UserRepositoryInterface {
             }
         }
     }
+
+    override fun getUsernameById(userId: Int, callback: UserRepositoryInterface.Callback<String?>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val username = userDAO.getUsernameById(userId)
+            withContext(Dispatchers.Main) {
+                callback.onResult(username)
+            }
+        }
+    }
 }

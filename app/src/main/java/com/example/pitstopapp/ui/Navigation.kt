@@ -100,7 +100,7 @@ fun PitStopNavGraph(
             val trackId = backStackEntry.arguments?.getString("trackId") ?: "unknown"
             val username = backStackEntry.arguments?.getString("username") ?: "unknown"
             PitStopAppTheme(darkTheme = isDarkTheme) {
-                TrackDetailsScreen(navController, trackId, username, trackRepository, lapTimeRepository)
+                TrackDetailsScreen(navController, trackId, username, trackRepository, lapTimeRepository, userRepository)
             }
         }
     }

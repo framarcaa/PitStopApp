@@ -9,6 +9,7 @@ interface UserRepositoryInterface {
     fun registerUser(user: User)
     fun loginUser(username: String, password: String, callback: Callback<LoginResult>)
     fun getUserByUsername(username: String, callback: Callback<User?>)
+    fun getUsernameById(userId: Int, callback: Callback<String?>)
 
     interface Callback<T> {
         fun onResult(result: T)

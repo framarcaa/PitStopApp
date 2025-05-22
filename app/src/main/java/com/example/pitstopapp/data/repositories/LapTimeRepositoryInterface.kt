@@ -9,4 +9,6 @@ interface LapTimeRepositoryInterface {
     suspend fun getLapTimesByTrackId(trackId: Int, callback: UserRepositoryInterface.Callback<List<LapTime>>)
 
     suspend fun getLapTimeByUserIdAndTrackId(userId: Int, trackId: Int, callback: UserRepositoryInterface.Callback<LapTime>)
+
+
 }
