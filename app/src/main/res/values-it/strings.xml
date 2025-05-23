@@ -17,4 +17,9 @@
     <string name="register_title">Registrati a PitStopApp</string>
     <string name="not_login_description">Non hai un account? Registrati qui</string>
     <string name="update_position_button">Aggiorna Posizione</string>
+    <string name="select_image_title">Seleziona immagine profilo</string>
+    <string name="select_image_description">Scegli un opzione per aggiornaere l immagine del profilo:</string>
+    <string name="take_picture_button">Scatta una foto</string>
+    <string name="gallery_button">Scegli dalla galleria</string>
+    <string name="position">posizione</string>
 </resources>

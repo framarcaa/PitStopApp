@@ -219,7 +219,7 @@ fun ProfileScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
-                            text = "Posizione: $location",
+                            text = stringResource(R.string.position) + ": $location",
                             style = MaterialTheme.typography.bodyMedium
                         )
 
@@ -290,12 +290,12 @@ fun showImageSelectionDialog(
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = {
-            Text("Seleziona immagine profilo")
+            Text(stringResource(R.string.select_image_title))
         },
         text = {
             Column {
                 Text(
-                    text = "Scegli un'opzione per aggiornare l'immagine del profilo:",
+                    text = stringResource(R.string.select_image_description),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -305,7 +305,7 @@ fun showImageSelectionDialog(
                 takePictureLauncher.launch(null)
                 onDismiss()
             }) {
-                Text("Scatta una foto")
+                Text(stringResource(R.string.take_picture_button))
             }
         },
         dismissButton = {
@@ -313,7 +313,7 @@ fun showImageSelectionDialog(
                 pickImageLauncher.launch("image/*")
                 onDismiss()
             }) {
-                Text("Scegli dalla galleria")
+                Text(stringResource(R.string.gallery_button))
             }
         }
     )
