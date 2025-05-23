@@ -10,4 +10,9 @@
     <string name="dark_theme_setting">Tema Scuro</string>
     <string name="add_time_button">Aggiungi tempo</string>
     <string name="circuit_map_description">Mappa del percorso</string>
+    <string name="circuit_length_meters">Lunghezza</string>
+    <string name="confirm_password_field">Conferma Password</string>
+    <string name="register_button">REGISTRATI</string>
+    <string name="not_registered_description">Possiedi già un account? Esegui il login qui</string>
+    <string name="register_title">Registrati a PitStopApp</string>
 </resources>

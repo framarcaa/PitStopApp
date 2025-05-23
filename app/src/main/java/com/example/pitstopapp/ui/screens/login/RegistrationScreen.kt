@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -114,7 +115,7 @@ fun RegistrationScreen(navController: NavHostController, userRepository: UserRep
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Registrati a PitStopApp", style = MaterialTheme.typography.headlineSmall)
+        Text(text = stringResource(R.string.register_title), style = MaterialTheme.typography.headlineSmall)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -150,7 +151,7 @@ fun RegistrationScreen(navController: NavHostController, userRepository: UserRep
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
-            label = { Text("Conferma Password") },
+            label = { Text(stringResource(R.string.confirm_password_field)) },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
@@ -161,13 +162,13 @@ fun RegistrationScreen(navController: NavHostController, userRepository: UserRep
             onClick = { registerUser() },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("REGISTRATI")
+            Text((stringResource(R.string.register_button)))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Possiedi giá un account? Esegui il login qui",
+            text = stringResource(R.string.not_registered_description),
             color = Color.Blue,
             modifier = Modifier
                 .clickable {

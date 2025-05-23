@@ -9,4 +9,9 @@
     <string name="dark_theme_setting">Dark Theme</string>
     <string name="add_time_button">Add Time</string>
     <string name="circuit_map_description">Circuit map</string>
+    <string name="circuit_length_meters">Length</string>
+    <string name="confirm_password_field">Confirm Password</string>
+    <string name="register_button">REGISTER</string>
+    <string name="not_registered_description">Already have an account? Log in here</string>
+    <string name="register_title">Register to PitStopApp</string>
 </resources>
