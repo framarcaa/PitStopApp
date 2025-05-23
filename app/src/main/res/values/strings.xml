@@ -6,4 +6,7 @@
     <string name="unknown_screen_name">Unknown Screen</string>
     <string name="back_button_description">Go Back</string>
     <string name="details_screen_name">Track Details</string>
+    <string name="dark_theme_setting">Dark Theme</string>
+    <string name="add_time_button">Add Time</string>
+    <string name="circuit_map_description">Circuit map</string>
 </resources>

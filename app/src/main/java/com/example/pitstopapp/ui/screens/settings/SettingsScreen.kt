@@ -24,9 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.pitstopapp.R
 import com.example.pitstopapp.ui.composables.AppBar
 import com.example.pitstopapp.ui.composables.BottomBar
 
@@ -55,7 +57,7 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Tema Scuro",
+                    text = stringResource(R.string.dark_theme_setting),
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Switch(

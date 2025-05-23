@@ -23,9 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.Track
 import com.example.pitstopapp.data.repositories.TrackRepository
 
@@ -90,7 +92,7 @@ fun TrackCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Button(onClick = { onDetailsClick(track) }) {
-                        Text("Vedi dettagli")
+                        Text(stringResource(R.string.details_screen_name))
                     }
 
                     Row(
