@@ -14,9 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.LapTime
 import com.example.pitstopapp.data.database.User
 import com.example.pitstopapp.data.repositories.UserRepository
@@ -31,7 +33,7 @@ fun HeaderRow() {
             .border(1.dp, Color.Black)
             .padding(vertical = 8.dp)
     ) {
-        listOf("Posizione", "Pilota", "Giro migliore").forEach {
+        listOf(stringResource(R.string.position), stringResource(R.string.pilot), stringResource(R.string.best_lap)).forEach {
             Text(
                 text = it,
                 modifier = Modifier.weight(1f),

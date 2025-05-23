@@ -24,5 +24,6 @@
     <string name="position">Posizione</string>
     <string name="description">Descrizione</string>
     <string name="length">Lunghezza</string>
-
+    <string name="pilot">Pilota</string>
+    <string name="best_lap">Giro migliore</string>
 </resources>
