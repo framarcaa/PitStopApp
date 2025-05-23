@@ -26,4 +26,6 @@
     <string name="length">Lunghezza</string>
     <string name="pilot">Pilota</string>
     <string name="best_lap">Giro migliore</string>
+    <string name="description_not_found">Descrizione non disponibile</string>
+    <string name="circuit_not_found">Circuito non disponibile</string>
 </resources>

@@ -110,7 +110,7 @@ fun TrackDetailsScreen(
         ){
             item {
                 Text(
-                    text = track?.name ?: "Circuito non trovato",
+                    text = track?.name ?: stringResource(R.string.circuit_not_found),
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -140,13 +140,13 @@ fun TrackDetailsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = track?.description ?: "Descrizione non disponibile",
+                    text = track?.description ?: stringResource(R.string.description_not_found),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(16.dp)
                 )
 
                 Text(
-                    text = "Lunghezza: ${track?.length ?: 0} m",
+                    text = stringResource(R.string.length) + ": ${track?.length ?: 0} m",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(16.dp)

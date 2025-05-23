@@ -25,4 +25,6 @@
     <string name="length">Length</string>
     <string name="pilot">Pilot</string>
     <string name="best_lap">Best lap</string>
+    <string name="description_not_found">Description not found</string>
+    <string name="circuit_not_found">Circuit not found</string>
 </resources>
