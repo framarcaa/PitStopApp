@@ -74,12 +74,12 @@ fun TrackCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Descrizione: ${track.description}",
+                    text = stringResource(R.string.description) + ": ${track.description}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
                 Text(
-                    text = "Lunghezza: ${track.length} m",
+                    text =  stringResource(R.string.length) + ": ${track.length} m",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )

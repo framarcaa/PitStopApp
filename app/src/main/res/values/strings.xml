@@ -20,5 +20,7 @@
     <string name="select_image_description">Select an option to update the profile picture:</string>
     <string name="take_picture_button">Take a picture</string>
     <string name="gallery_button">Choose one in gallery</string>
-    <string name="position">position</string>
+    <string name="position">Position</string>
+    <string name="description">Description</string>
+    <string name="length">Length</string>
 </resources>
