@@ -34,8 +34,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.pitstopapp.R
 import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.database.User
 import com.example.pitstopapp.data.repositories.UserRepository
@@ -125,13 +127,13 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                placeholder = { Text("Cerca circuito...") },
+                placeholder = { Text(stringResource(R.string.search_circuit_bar)) },
                 shape = RoundedCornerShape(10.dp)
             )
 
             // Numero di circuiti trovati
             Text(
-                text = "Trovati ${trackList.size} circuiti(s)",
+                text = stringResource(R.string.circuit_found_number) + ": ${trackList.size}",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),

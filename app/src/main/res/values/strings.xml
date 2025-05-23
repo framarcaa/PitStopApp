@@ -27,4 +27,7 @@
     <string name="best_lap">Best lap</string>
     <string name="description_not_found">Description not found</string>
     <string name="circuit_not_found">Circuit not found</string>
+    <string name="search_circuit_bar">Search circuit…</string>
+    <string name="circuit_found_number">Circuit found</string>
+    <string name="empty_field">Campo vuoto</string>
 </resources>
