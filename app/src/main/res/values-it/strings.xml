@@ -16,4 +16,5 @@
     <string name="not_registered_description">Possiedi già un account? Esegui il login qui</string>
     <string name="register_title">Registrati a PitStopApp</string>
     <string name="not_login_description">Non hai un account? Registrati qui</string>
+    <string name="update_position_button">Aggiorna Posizione</string>
 </resources>
