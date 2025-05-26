@@ -40,6 +40,7 @@ fun AppBar(navController: NavHostController) {
         backStackEntry?.destination?.route?.startsWith(PitStopRoute.Profile.toString()) == true -> stringResource(R.string.profile_screen_name)
         backStackEntry?.destination?.route?.startsWith(PitStopRoute.Settings.toString()) == true -> stringResource(R.string.settings_screen_name)
         backStackEntry?.destination?.route?.startsWith(PitStopRoute.Details.toString()) == true -> stringResource(R.string.details_screen_name)
+        backStackEntry?.destination?.route?.startsWith(PitStopRoute.AddLapTime.toString()) == true -> stringResource(R.string.add_time_button)
         else -> "Unknown Screen"
     }
 
@@ -52,17 +53,10 @@ fun AppBar(navController: NavHostController) {
             )
         },
         navigationIcon = {
-            if (title == stringResource(R.string.profile_screen_name)) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        Icons.Filled.ArrowBackIosNew,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
-            if(title == stringResource(R.string.settings_screen_name) ||
-                title == stringResource(R.string.details_screen_name)){
+            if (title == stringResource(R.string.profile_screen_name) ||
+                title == stringResource(R.string.settings_screen_name) ||
+                title == stringResource(R.string.details_screen_name) ||
+                title == stringResource(R.string.add_time_button)) {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         Icons.Filled.ArrowBackIosNew,

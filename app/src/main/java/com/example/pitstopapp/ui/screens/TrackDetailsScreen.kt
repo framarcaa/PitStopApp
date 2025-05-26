@@ -46,6 +46,7 @@ import com.example.pitstopapp.data.repositories.LapTimeRepository
 import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
+import com.example.pitstopapp.ui.PitStopRoute
 import com.example.pitstopapp.ui.composables.AppBar
 import com.example.pitstopapp.ui.composables.BottomBar
 import com.example.pitstopapp.ui.composables.HeaderRow
@@ -61,7 +62,6 @@ fun TrackDetailsScreen(
     lapTimeRepository: LapTimeRepository,
     userRepository: UserRepository
 ) {
-    val coroutineScope = rememberCoroutineScope()
     var track by remember { mutableStateOf<Track?>(null) }
     var times by remember { mutableStateOf<List<LapTime>>(emptyList()) }
     var user by remember { mutableStateOf<User?>(null) }
@@ -170,9 +170,9 @@ fun TrackDetailsScreen(
                 )
                 Button(
                     onClick = {
-                        coroutineScope.launch {
-                            lapTimeRepository.insertLapTime(lapTimeTMP)
-                        }
+                        navController.navigate(
+                            "${PitStopRoute.AddLapTime}/${trackId}/${user?.id ?: 0}/${username}"
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()

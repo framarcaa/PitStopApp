@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.example.pitstopapp.data.repositories.LapTimeRepository
 import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.repositories.UserRepository
+import com.example.pitstopapp.ui.screens.AddLapTimeScreen
 import com.example.pitstopapp.ui.screens.TrackDetailsScreen
 import com.example.pitstopapp.ui.screens.home.HomeScreen
 import com.example.pitstopapp.ui.screens.login.LoginScreen
@@ -25,6 +26,7 @@ sealed interface PitStopRoute {
     @Serializable data object Profile : PitStopRoute
     @Serializable data object Settings : PitStopRoute
     @Serializable data object Details : PitStopRoute
+    @Serializable data object AddLapTime : PitStopRoute
 }
 
 @Composable
@@ -101,6 +103,15 @@ fun PitStopNavGraph(
             val username = backStackEntry.arguments?.getString("username") ?: "unknown"
             PitStopAppTheme(darkTheme = isDarkTheme) {
                 TrackDetailsScreen(navController, trackId, username, trackRepository, lapTimeRepository, userRepository)
+            }
+        }
+
+        composable("${PitStopRoute.AddLapTime}/{trackId}/{userId}/{username}") { backStackEntry ->
+            val trackId = backStackEntry.arguments?.getString("trackId") ?: "unknown"
+            val userId = backStackEntry.arguments?.getString("userId") ?: "unknown"
+            val username = backStackEntry.arguments?.getString("username") ?: "unknown"
+            PitStopAppTheme(darkTheme = isDarkTheme) {
+                AddLapTimeScreen(navController, trackId.toInt(), userId.toInt(), username, lapTimeRepository)
             }
         }
     }
