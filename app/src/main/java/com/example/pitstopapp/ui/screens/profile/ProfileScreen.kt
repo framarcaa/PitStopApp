@@ -3,9 +3,11 @@ package com.example.pitstopapp.ui.screens.profile
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -68,8 +70,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Locale
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navController: NavHostController,
@@ -132,42 +132,6 @@ fun ProfileScreen(
 
     Scaffold(
         topBar = { AppBar(navController) },
-            /*TopAppBar(
-                title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "Profilo Utente",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { navController.navigate("leaderboard_screen/$username") }) {
-                        Icon(
-                            Icons.Filled.Leaderboard,
-                            contentDescription = "Classifica",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            )
-        }*/
         bottomBar = { BottomBar(navController = navController, username = username) },
         content = { paddingValues ->
             Column(
@@ -273,7 +237,7 @@ fun ProfileScreen(
     )
 
     if (showDialog) {
-        showImageSelectionDialog(
+        ShowImageSelectionDialog(
             pickImageLauncher = pickImageLauncher,
             takePictureLauncher = takePictureLauncher,
             onDismiss = { showDialog = false }
@@ -282,7 +246,7 @@ fun ProfileScreen(
 }
 
 @Composable
-fun showImageSelectionDialog(
+fun ShowImageSelectionDialog(
     pickImageLauncher: ActivityResultLauncher<String>,
     takePictureLauncher: ActivityResultLauncher<Void?>,
     onDismiss: () -> Unit
