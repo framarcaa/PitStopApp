@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.play.services.maps)
+    implementation(libs.android.maps.compose)
     implementation(libs.coil.compose)
     implementation(libs.jbcrypt)
     implementation(libs.androidx.lifecycle.runtime.compose)
