@@ -55,7 +55,7 @@ fun AddLapTimeScreen(
             OutlinedTextField(
                 value = lapTime,
                 onValueChange = { lapTime = it },
-                label = { Text("Lap Time") },
+                label = { Text(stringResource(R.string.lap_time_input)) },
                 modifier = Modifier.fillMaxWidth()
             )
 

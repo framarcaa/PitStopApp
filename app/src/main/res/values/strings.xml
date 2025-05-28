@@ -30,4 +30,5 @@
     <string name="search_circuit_bar">Search circuit…</string>
     <string name="circuit_found_number">Circuit found</string>
     <string name="empty_field">Campo vuoto</string>
+    <string name="lap_time_input">Tempo su giro</string>
 </resources>
