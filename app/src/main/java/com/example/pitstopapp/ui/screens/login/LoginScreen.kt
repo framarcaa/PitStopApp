@@ -7,6 +7,7 @@ import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,10 +17,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -101,8 +104,8 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
                                         sendLoginNotification(username, null)
                                     }
                                 }*/
-                                navController.navigate("home/${username}") {
-                                    popUpTo("login") { inclusive = true }
+                                navController.navigate("${PitStopRoute.Home}/${username}") {
+                                    popUpTo("${PitStopRoute.Home}/${username}") { inclusive = true }
                                 }
                             }
                             is LoginResult.InvalidCredentials -> {
@@ -124,65 +127,73 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
         })
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo",
-            modifier = Modifier.size(217.dp, 233.dp)
-        )
+    Scaffold (
+        modifier = Modifier.fillMaxSize(),
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        containerColor = MaterialTheme.colorScheme.primary
+    ) { padding ->
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "Login to PitStopApp", style = MaterialTheme.typography.headlineSmall)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Username") },
-
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        if (loginError.isNotEmpty()) {
-            Text(text = loginError, color = Color.Red)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = { loginUser() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("LOGIN")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = stringResource(R.string.not_login_description),
-            color = Color.Blue,
+        Column(
             modifier = Modifier
-                .clickable {
-                    navController.navigate(PitStopRoute.Register)
-                }
-        )
+                .fillMaxSize()
+                .padding(top = 64.dp)
+                .background(MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo",
+                modifier = Modifier.size(217.dp, 233.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Login to PitStopApp", style = MaterialTheme.typography.headlineSmall)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text("Username") },
+
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            )
+
+            if (loginError.isNotEmpty()) {
+                Text(text = loginError, color = Color.Red)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = { loginUser() },
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            ) {
+                Text("LOGIN")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = stringResource(R.string.not_login_description),
+                color = Color.Blue,
+                modifier = Modifier.padding(horizontal = 16.dp)
+                    .clickable {
+                        navController.navigate(PitStopRoute.Register)
+                    }
+            )
+        }
     }
 }
