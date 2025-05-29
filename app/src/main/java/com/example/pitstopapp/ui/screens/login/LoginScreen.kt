@@ -112,7 +112,7 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
                                     }
                                 }*/
                                 navController.navigate("${PitStopRoute.Home}/${username}") {
-                                    popUpTo("${PitStopRoute.Home}/${username}") { inclusive = true }
+                                    popUpTo(PitStopRoute.Login) { inclusive = true }
                                 }
                             }
                             is LoginResult.InvalidCredentials -> {

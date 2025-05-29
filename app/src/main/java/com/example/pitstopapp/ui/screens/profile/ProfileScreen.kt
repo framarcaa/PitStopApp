@@ -1,12 +1,15 @@
 package com.example.pitstopapp.ui.screens.profile
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -82,6 +85,38 @@ fun ProfileScreen(
     var location by remember { mutableStateOf("Non impostata") }
     var showDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            val granted = permissions.values.all { it }
+            if (!granted) {
+                Toast.makeText(context, "Permessi non concessi", Toast.LENGTH_SHORT).show()
+            }
+        }
+    )
+
+    fun requestImagePermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.CAMERA)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            permissionLauncher.launch(permissionsToRequest.toTypedArray())
+        }
+    }
 
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
@@ -166,7 +201,10 @@ fun ProfileScreen(
                                 .fillMaxWidth()
                                 .height(150.dp)
                                 .clip(MaterialTheme.shapes.medium)
-                                .clickable { showDialog = true }
+                                .clickable {
+                                    requestImagePermissions()
+                                    showDialog = true
+                                }
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -284,15 +322,33 @@ fun ShowImageSelectionDialog(
 }
 
 fun copyImageToAppStorage(context: Context, uri: Uri): Uri {
-    val inputStream = context.contentResolver.openInputStream(uri)
-    val fileName = "profile_${System.currentTimeMillis()}.jpg"
-    val outputFile = File(context.filesDir, fileName)
+    val resolver = context.contentResolver
+    val fileName = "pitstop_profile_${System.currentTimeMillis()}.jpg"
 
-    inputStream?.use { input ->
-        outputFile.outputStream().use { output ->
-            input.copyTo(output)
+    val imageCollection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    } else {
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+    }
+
+    val newImageDetails = ContentValues().apply {
+        put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/PitStop")
+        put(MediaStore.Images.Media.IS_PENDING, 1)
+    }
+
+    val imageUri = resolver.insert(imageCollection, newImageDetails)!!
+
+    resolver.openOutputStream(imageUri)?.use { outputStream ->
+        resolver.openInputStream(uri)?.use { inputStream ->
+            inputStream.copyTo(outputStream)
         }
     }
 
-    return Uri.fromFile(outputFile)
+    newImageDetails.clear()
+    newImageDetails.put(MediaStore.Images.Media.IS_PENDING, 0)
+    resolver.update(imageUri, newImageDetails, null, null)
+
+    return imageUri
 }

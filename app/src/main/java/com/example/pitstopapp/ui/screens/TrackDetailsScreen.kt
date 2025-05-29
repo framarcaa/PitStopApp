@@ -208,7 +208,7 @@ fun TrackDetailsScreen(
                             modifier = Modifier.fillMaxSize(),
                             cameraPositionState = cameraPositionState,
                             properties = MapProperties(
-                                mapType = MapType.SATELLITE,
+                                mapType = MapType.NORMAL,
                                 isMyLocationEnabled = false
                             )
                         ) {
