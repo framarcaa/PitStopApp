@@ -125,130 +125,129 @@ fun TrackDetailsScreen(
         bottomBar = { BottomBar(navController, username) }
     ) { padding ->
         LazyColumn (
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-            ){
-                item {
-                    Text(
-                        text = track?.name ?: stringResource(R.string.circuit_not_found),
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        textAlign = TextAlign.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ){
+            item {
+                Text(
+                    text = track?.name ?: stringResource(R.string.circuit_not_found),
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                val context = LocalContext.current
+                val imageName = track?.imageUri
+                val imageResId = if (imageName != null) {
+                    context.resources.getIdentifier(imageName, "drawable", context.packageName)
+                } else {
+                    R.drawable.logo // Sostituisci con un'immagine predefinita
+                }
+                val imagePainter = rememberAsyncImagePainter(model = imageResId)
+
+                Image(
+                    painter = imagePainter,
+                    contentDescription = "Track Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp) // o la metà dell'altezza prevista della card
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = track?.description ?: stringResource(R.string.description_not_found),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+
+                Text(
+                    text = stringResource(R.string.length) + ": ${track?.length ?: 0} m",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(16.dp)
+                )
+                val locationParts = track?.location?.split(",")
+                val trackLatLng = LatLng(
+                    locationParts?.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
+                    locationParts?.getOrNull(1)?.toDoubleOrNull() ?: 0.0
+                )
+                val cameraPositionState = rememberCameraPositionState {
+                    position = CameraPosition.fromLatLngZoom(trackLatLng, 15f)
+                }
+                LaunchedEffect(trackLatLng) {
+                    cameraPositionState.animate(
+                        CameraUpdateFactory.newLatLngZoom(trackLatLng, 15f),
+                        1000 // millisecondi di animazione
                     )
+                }
+                Log.d("TrackDetailsScreen", "Track LatLng: $cameraPositionState")
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                    val context = LocalContext.current
-                    val imageName = track?.imageUri
-                    val imageResId = if (imageName != null) {
-                        context.resources.getIdentifier(imageName, "drawable", context.packageName)
-                    } else {
-                        R.drawable.logo // Sostituisci con un'immagine predefinita
-                    }
-                    val imagePainter = rememberAsyncImagePainter(model = imageResId)
+                Text(
+                    text = stringResource(R.string.circuit_map_description),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
 
-                    Image(
-                        painter = imagePainter,
-                        contentDescription = "Track Image",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp) // o la metà dell'altezza prevista della card
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = track?.description ?: stringResource(R.string.description_not_found),
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(16.dp)
-                    )
-
-                    Text(
-                        text = stringResource(R.string.length) + ": ${track?.length ?: 0} m",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                    val locationParts = track?.location?.split(",")
-                    val trackLatLng = LatLng(
-                        locationParts?.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
-                        locationParts?.getOrNull(1)?.toDoubleOrNull() ?: 0.0
-                    )
-                    val cameraPositionState = rememberCameraPositionState {
-                        position = CameraPosition.fromLatLngZoom(trackLatLng, 15f)
-                    }
-                    LaunchedEffect(trackLatLng) {
-                        cameraPositionState.animate(
-                            CameraUpdateFactory.newLatLngZoom(trackLatLng, 15f),
-                            1000 // millisecondi di animazione
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                        .padding(16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
+                ) {
+                    GoogleMap(
+                        modifier = Modifier.fillMaxSize(),
+                        cameraPositionState = cameraPositionState,
+                        properties = MapProperties(
+                            mapType = MapType.NORMAL,
+                            isMyLocationEnabled = false
+                        )
+                    ) {
+                        Marker(
+                            state = MarkerState(position = trackLatLng),
+                            title = track?.name ?: "Circuito",
+                            snippet = track?.description ?: ""
                         )
                     }
-                    Log.d("TrackDetailsScreen", "Track LatLng: $cameraPositionState")
+                }
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = stringResource(R.string.circuit_map_description),
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(16.dp)
-                    )
-
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                            .padding(16.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
-                    ) {
-                        GoogleMap(
-                            modifier = Modifier.fillMaxSize(),
-                            cameraPositionState = cameraPositionState,
-                            properties = MapProperties(
-                                mapType = MapType.NORMAL,
-                                isMyLocationEnabled = false
-                            )
-                        ) {
-                            Marker(
-                                state = MarkerState(position = trackLatLng),
-                                title = track?.name ?: "Circuito",
-                                snippet = track?.description ?: ""
-                            )
-                        }
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                    HeaderRow()
+                    times.forEachIndexed { index, lapTime ->
+                        LapTimeRow(index + 1, lapTime, userRepository)
                     }
+                }
 
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                        HeaderRow()
-                        times.forEachIndexed { index, lapTime ->
-                            LapTimeRow(index + 1, lapTime, userRepository)
-                        }
-                    }
+                Spacer(modifier = Modifier.height(16.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                val lapTimeTMP = LapTime(
+                    userId = user?.id ?: 0,
+                    trackId = trackId.toInt(),
+                    lapTime = "1.56"
+                )
+                Button(
+                    onClick = {
+                        navController.navigate(
+                            "${PitStopRoute.AddLapTime}/${trackId}/${user?.id ?: 0}/${username}"
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text(text = stringResource(R.string.add_time_button))
+                }
 
-                    val lapTimeTMP = LapTime(
-                        userId = user?.id ?: 0,
-                        trackId = trackId.toInt(),
-                        lapTime = "1.56"
-                    )
-                    Button(
-                        onClick = {
-                            navController.navigate(
-                                "${PitStopRoute.AddLapTime}/${trackId}/${user?.id ?: 0}/${username}"
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Text(text = stringResource(R.string.add_time_button))
-                    }
-                //}
-                Spacer(modifier = Modifier.height(320.dp))
             }
 
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -20,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.pitstopapp.R
@@ -51,25 +53,35 @@ fun AddLapTimeScreen(
         ) {
             val coroutineScope = rememberCoroutineScope()
             var lapTime by remember { mutableStateOf("") }
+            val isLapTimeValid = lapTime.matches(Regex("^\\d{2}\\.\\d{2}$"))
 
             OutlinedTextField(
                 value = lapTime,
-                onValueChange = { lapTime = it },
+                onValueChange = {
+                    if (it.matches(Regex("^\\d{0,2}(\\.\\d{0,2})?$"))) {
+                        lapTime = it
+                    }
+                },
                 label = { Text("Lap Time") },
-                modifier = Modifier.fillMaxWidth()
+                placeholder = { Text("00.00") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            val lapTimeTMP = LapTime(
-                id = 0,
-                trackId = trackId,
-                userId = userId,
-                lapTime = lapTime
-            )
-
             Button(
                 onClick = {
+                    val lapTimeTMP = LapTime(
+                        id = 0,
+                        trackId = trackId,
+                        userId = userId,
+                        lapTime = lapTime
+                    )
+
                     coroutineScope.launch {
                         lapTimeRepository.insertLapTime(lapTimeTMP)
                     }
@@ -77,6 +89,7 @@ fun AddLapTimeScreen(
                         popUpTo("${PitStopRoute.Details}/$trackId/$username") { inclusive = true }
                     }
                 },
+                enabled = isLapTimeValid,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.add_time_button))

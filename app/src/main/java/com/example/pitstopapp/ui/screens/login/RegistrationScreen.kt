@@ -199,14 +199,7 @@ fun RegistrationScreen(navController: NavHostController, userRepository: UserRep
                 label = { Text(stringResource(R.string.confirm_password_field)) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }
-                )
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
