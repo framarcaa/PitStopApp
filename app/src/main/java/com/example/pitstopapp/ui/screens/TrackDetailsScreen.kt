@@ -178,12 +178,12 @@ fun TrackDetailsScreen(
                     locationParts?.getOrNull(1)?.toDoubleOrNull() ?: 0.0
                 )
                 val cameraPositionState = rememberCameraPositionState {
-                    position = CameraPosition.fromLatLngZoom(trackLatLng, 15f)
+                    position = CameraPosition.fromLatLngZoom(trackLatLng, 12f)
                 }
                 LaunchedEffect(trackLatLng) {
                     cameraPositionState.animate(
-                        CameraUpdateFactory.newLatLngZoom(trackLatLng, 15f),
-                        1000 // millisecondi di animazione
+                        CameraUpdateFactory.newLatLngZoom(trackLatLng, 12f),
+                        3000 // millisecondi di animazione
                     )
                 }
                 Log.d("TrackDetailsScreen", "Track LatLng: $cameraPositionState")
