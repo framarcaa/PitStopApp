@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -32,10 +35,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -52,6 +58,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun LoginScreen(navController: NavHostController, userRepository: UserRepositoryInterface) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     val scope = rememberCoroutineScope()
     val sharedPrefs = remember { context.getSharedPreferences("login_prefs", MODE_PRIVATE) }
@@ -137,7 +144,14 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 64.dp)
-                .background(MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.background)
+                .clickable(
+                    // Indica che questo clic non deve essere consumato
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    focusManager.clearFocus() // Rimuove il focus → chiude la tastiera
+                },
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -157,7 +171,14 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
                 value = username,
                 onValueChange = { username = it },
                 label = { Text("Username") },
-
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }
+                ),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
             )
 
@@ -168,6 +189,14 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
                 onValueChange = { password = it },
                 label = { Text("Password") },
                 visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }
+                ),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
             )
 

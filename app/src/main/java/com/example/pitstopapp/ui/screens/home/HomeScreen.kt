@@ -1,6 +1,8 @@
 package com.example.pitstopapp.ui.screens.home
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -53,6 +56,7 @@ fun HomeScreen(
     onTrackClick: (Track) -> Unit,
     username: String
 ) {
+    val focusManager = LocalFocusManager.current
     var searchQuery by remember { mutableStateOf("") }
     var trackList by remember { mutableStateOf<List<Track>>(emptyList()) }
     var userId by remember { mutableStateOf("") }
@@ -120,6 +124,12 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(contentPadding)
                 .padding(16.dp)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    focusManager.clearFocus()
+                },
         ) {
             OutlinedTextField(
                 value = searchQuery,
@@ -128,7 +138,8 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 placeholder = { Text(stringResource(R.string.search_circuit_bar)) },
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(10.dp),
+                singleLine = true
             )
 
             // Numero di circuiti trovati
