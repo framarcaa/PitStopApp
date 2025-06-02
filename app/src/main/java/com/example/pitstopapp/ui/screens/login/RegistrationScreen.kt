@@ -1,10 +1,7 @@
 package com.example.pitstopapp.ui.screens.login
 
-import android.Manifest
 import android.content.Context
-import android.os.Build
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,7 +38,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
 import androidx.navigation.NavHostController
 import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.User

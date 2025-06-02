@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.LapTime
-import com.example.pitstopapp.data.database.User
 import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
 

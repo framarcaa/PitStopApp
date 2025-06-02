@@ -1,9 +1,6 @@
 package com.example.pitstopapp.ui.screens.login
 
-import android.Manifest
 import android.content.Context.MODE_PRIVATE
-import android.content.pm.PackageManager
-import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -11,14 +8,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -44,13 +39,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
 import androidx.navigation.NavHostController
 import com.example.pitstopapp.R
 import com.example.pitstopapp.data.database.LoginResult
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
 import com.example.pitstopapp.ui.PitStopRoute
-import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,14 +52,12 @@ import kotlinx.coroutines.withContext
 fun LoginScreen(navController: NavHostController, userRepository: UserRepositoryInterface) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
     val scope = rememberCoroutineScope()
     val sharedPrefs = remember { context.getSharedPreferences("login_prefs", MODE_PRIVATE) }
 
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var loginError by remember { mutableStateOf("") }
-    var location: Location? by remember { mutableStateOf(null) }
 
     fun loginUser() {
         if (username.isEmpty() || password.isEmpty()) {

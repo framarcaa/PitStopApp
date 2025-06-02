@@ -3,7 +3,6 @@ package com.example.pitstopapp.data.repositories
 import android.app.Application
 import com.example.pitstopapp.data.database.LapTime
 import com.example.pitstopapp.data.database.LapTimeDAO
-import com.example.pitstopapp.data.database.Track
 import com.example.pitstopapp.data.database.UserDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

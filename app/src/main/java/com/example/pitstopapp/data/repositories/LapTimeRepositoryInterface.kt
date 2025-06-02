@@ -1,7 +1,6 @@
 package com.example.pitstopapp.data.repositories
 
 import com.example.pitstopapp.data.database.LapTime
-import com.example.pitstopapp.data.database.Track
 
 interface LapTimeRepositoryInterface {
     suspend fun insertLapTime(lapTime: LapTime)
