@@ -1,6 +1,7 @@
 package com.example.pitstopapp.data.repositories
 
 import android.app.Application
+import com.example.pitstopapp.data.database.BestLapResult
 import com.example.pitstopapp.data.database.LapTime
 import com.example.pitstopapp.data.database.LapTimeDAO
 import com.example.pitstopapp.data.database.UserDatabase
@@ -46,6 +47,18 @@ class LapTimeRepository(application: Application) : LapTimeRepositoryInterface {
                 if (lapTime != null) {
                     callback.onResult(lapTime)
                 }
+            }
+        }
+    }
+
+    override suspend fun getBestLapsTimeByUserId(
+        userId: Int,
+        callback: UserRepositoryInterface.Callback<List<BestLapResult>>
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val bestLaps = lapTimeDAO.getBestLapsTimeByUserId(userId)
+            withContext(Dispatchers.Main) {
+                callback.onResult(bestLaps)
             }
         }
     }

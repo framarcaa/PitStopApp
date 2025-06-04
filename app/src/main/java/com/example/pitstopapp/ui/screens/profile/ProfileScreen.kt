@@ -9,18 +9,28 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -39,6 +49,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -49,9 +63,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import coil.compose.rememberAsyncImagePainter
 import com.example.pitstopapp.R
+import com.example.pitstopapp.data.database.BestLapResult
 import com.example.pitstopapp.data.database.User
+import com.example.pitstopapp.data.repositories.LapTimeRepository
 import com.example.pitstopapp.data.repositories.UserRepository
 import com.example.pitstopapp.data.repositories.UserRepositoryInterface
+import com.example.pitstopapp.ui.composables.BestLapBarChart
 import com.example.pitstopapp.ui.composables.BottomBar
 import com.example.pitstopapp.utils.saveBitmapAsUri
 import com.google.android.gms.location.LocationServices
@@ -62,6 +79,7 @@ import java.util.Locale
 fun ProfileScreen(
     navController: NavHostController,
     userRepository: UserRepository,
+    lapTimeRepository: LapTimeRepository,
     username: String,
     context: Context
 ) {
@@ -69,7 +87,9 @@ fun ProfileScreen(
     var profilePictureUri by remember { mutableStateOf<Uri?>(null) }
     var location by remember { mutableStateOf("Non impostata") }
     var showDialog by remember { mutableStateOf(false) }
+    var bestLaps by remember { mutableStateOf<List<BestLapResult>>(emptyList()) }
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -150,114 +170,127 @@ fun ProfileScreen(
         })
     }
 
+    LaunchedEffect(user?.id) {
+        lapTimeRepository.getBestLapsTimeByUserId(user?.id ?: 0, object : UserRepositoryInterface.Callback<List<BestLapResult>> {
+            override fun onResult(result: List<BestLapResult>) {
+                bestLaps = result
+            }
+        })
+    }
+
     Scaffold(
         topBar = { AppBar(navController) },
         bottomBar = { BottomBar(navController = navController, username = username) },
-        content = { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(scrollState)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
+                    Image(
+                        painter = if (profilePictureUri != null) {
+                            rememberAsyncImagePainter(profilePictureUri)
+                        } else {
+                            painterResource(id = R.drawable.ic_default_profile)
+                        },
+                        contentDescription = "Immagine del profilo",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painter = if (profilePictureUri != null) {
-                                rememberAsyncImagePainter(profilePictureUri)
-                            } else {
-                                painterResource(id = R.drawable.ic_default_profile)
-                            },
-                            contentDescription = "Immagine del profilo",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .clip(MaterialTheme.shapes.medium)
-                                .clickable {
-                                    requestImagePermissions()
-                                    showDialog = true
-                                }
-                        )
+                            .height(150.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                            .clickable {
+                                requestImagePermissions()
+                                showDialog = true
+                            }
+                    )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        Text(
-                            text = user?.username ?: "Username non disponibile",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = user?.email ?: "Email non disponibile",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = user?.username ?: "Username non disponibile",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = user?.email ?: "Email non disponibile",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        Text(
-                            text = stringResource(R.string.position) + ": $location",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                    Text(
+                        text = stringResource(R.string.position) + ": $location",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        Button(
-                            onClick = {
-                                if (ContextCompat.checkSelfPermission(
-                                        context,
-                                        Manifest.permission.ACCESS_FINE_LOCATION
-                                    ) == PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    fusedLocationClient.lastLocation.addOnSuccessListener { loc: Location? ->
-                                        loc?.let {
-                                            val geocoder = Geocoder(context, Locale.getDefault())
-                                            val address = geocoder.getFromLocation(
-                                                loc.latitude,
-                                                loc.longitude,
-                                                1
-                                            )?.firstOrNull()?.locality ?: "Città sconosciuta"
-                                            location = address
-                                            coroutineScope.launch {
-                                                userRepository.updateLocation(username, address)
-                                            }
-                                        } ?: run {
-                                            Toast.makeText(
-                                                context,
-                                                "Impossibile ottenere la posizione",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                    Button(
+                        onClick = {
+                            if (ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                fusedLocationClient.lastLocation.addOnSuccessListener { loc: Location? ->
+                                    loc?.let {
+                                        val geocoder = Geocoder(context, Locale.getDefault())
+                                        val address = geocoder.getFromLocation(
+                                            loc.latitude,
+                                            loc.longitude,
+                                            1
+                                        )?.firstOrNull()?.locality ?: "Città sconosciuta"
+                                        location = address
+                                        coroutineScope.launch {
+                                            userRepository.updateLocation(username, address)
                                         }
+                                    } ?: run {
+                                        Toast.makeText(
+                                            context,
+                                            "Impossibile ottenere la posizione",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                } else {
-                                    ActivityCompat.requestPermissions(
-                                        context as android.app.Activity,
-                                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                                        1
-                                    )
                                 }
-                            },
-                            shape = MaterialTheme.shapes.medium,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(stringResource(R.string.update_position_button))
-                        }
-
+                            } else {
+                                ActivityCompat.requestPermissions(
+                                    context as android.app.Activity,
+                                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                    1
+                                )
+                            }
+                        },
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.update_position_button))
                     }
+
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            Log.d("ProfileScreen", "Best Laps: $bestLaps")
+            BestLapBarChart(bestLaps.map { it.name to it.lapTime })
+            Spacer(modifier = Modifier.height(70.dp))
         }
-    )
+    }
 
     if (showDialog) {
         ShowImageSelectionDialog(
@@ -337,3 +370,4 @@ fun copyImageToAppStorage(context: Context, uri: Uri): Uri {
 
     return imageUri
 }
+

@@ -66,7 +66,7 @@ fun PitStopNavGraph(
         composable("${PitStopRoute.Profile}/{username}") { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "unknown"
             PitStopAppTheme(darkTheme = isDarkTheme) {
-                ProfileScreen(navController, userRepository, username, LocalContext.current)
+                ProfileScreen(navController, userRepository, lapTimeRepository, username, LocalContext.current)
             }
 
         }
