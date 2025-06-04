@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import androidx.core.content.edit
 
 class ThemeManager(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
@@ -22,8 +23,8 @@ class ThemeManager(context: Context) {
         return sharedPreferences.getBoolean("${THEME_KEY_PREFIX}$username", false)
     }
 
-    suspend fun setDarkTheme(username: String, isDark: Boolean) {
-        sharedPreferences.edit().putBoolean("${THEME_KEY_PREFIX}$username", isDark).apply()
+    fun setDarkTheme(username: String, isDark: Boolean) {
+        sharedPreferences.edit { putBoolean("${THEME_KEY_PREFIX}$username", isDark) }
         _currentThemeFlow.value = isDark
     }
 
