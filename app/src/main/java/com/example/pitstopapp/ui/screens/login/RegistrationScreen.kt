@@ -1,6 +1,5 @@
 package com.example.pitstopapp.ui.screens.login
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,7 +48,6 @@ import com.example.pitstopapp.ui.PitStopRoute
 fun RegistrationScreen(navController: NavHostController, userRepository: UserRepository) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val sharedPrefs = remember { context.getSharedPreferences("login_prefs", Context.MODE_PRIVATE) }
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -67,13 +65,13 @@ fun RegistrationScreen(navController: NavHostController, userRepository: UserRep
         }
 
         userRepository.isUsernameTaken(username, object : UserRepositoryInterface.Callback<Boolean> {
-            override fun onResult(isTaken: Boolean) {
-                if (isTaken) {
+            override fun onResult(result: Boolean) {
+                if (result) {
                     Toast.makeText(context, "Username già in uso", Toast.LENGTH_SHORT).show()
                 } else {
                     userRepository.isEmailTaken(email, object : UserRepositoryInterface.Callback<Boolean> {
-                        override fun onResult(isTaken: Boolean) {
-                            if (isTaken) {
+                        override fun onResult(result: Boolean) {
+                            if (result) {
                                 Toast.makeText(context, "Email già in uso", Toast.LENGTH_SHORT).show()
                             } else {
                                 // Passa la password non criptata al repository
