@@ -1,6 +1,5 @@
 package com.example.pitstopapp.ui.screens.login
 
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -53,7 +52,6 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
-    val sharedPrefs = remember { context.getSharedPreferences("login_prefs", MODE_PRIVATE) }
 
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
