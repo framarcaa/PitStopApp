@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.pitstopapp.R
 import com.example.pitstopapp.data.repositories.TrackRepository
 import com.example.pitstopapp.data.database.User
@@ -50,9 +49,9 @@ fun HomeScreen(
     var searchQuery by remember { mutableStateOf("") }
     var trackList by remember { mutableStateOf<List<Track>>(emptyList()) }
     var userId by remember { mutableStateOf("") }
-    var showFavorites by remember { mutableStateOf(false) }
+    val showFavorites by remember { mutableStateOf(false) }
 
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    //val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     fun showTrackList() {
         if (userId.isNotEmpty()) {
