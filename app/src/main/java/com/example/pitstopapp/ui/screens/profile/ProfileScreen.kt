@@ -288,7 +288,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(24.dp))
             Log.d("ProfileScreen", "Best Laps: $bestLaps")
             BestLapBarChart(bestLaps.map { it.name to it.lapTime })
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(120.dp))
         }
     }
 
