@@ -57,13 +57,7 @@ fun AppBar(navController: NavHostController) {
                 }
             }
         },
-        actions = {
-            if (title == stringResource(R.string.home_screen_name)) {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(Icons.Outlined.StarOutline, contentDescription = "Favourite", Modifier.size(30.dp))
-                }
-            }
-        },
+        actions = {},
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
             actionIconContentColor = MaterialTheme.colorScheme.onPrimary,

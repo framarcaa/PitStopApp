@@ -78,21 +78,6 @@ fun RegistrationScreen(navController: NavHostController, userRepository: UserRep
                                 val newUser = User(username = username, email = email, password = password)
                                 userRepository.registerUser(newUser)
                                 Toast.makeText(context, "Registrazione avvenuta con successo", Toast.LENGTH_SHORT).show()
-
-                                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                    if (!hasNotificationPermission && !hasShownNotificationRequest) {
-                                        if (ActivityCompat.shouldShowRequestPermissionRationale(context as ComponentActivity, Manifest.permission.POST_NOTIFICATIONS)) {
-                                            Toast.makeText(context, "Permesso notifiche necessario", Toast.LENGTH_SHORT).show()
-                                        }
-                                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                                        sharedPrefs.edit().putBoolean("notification_permission_requested", true).apply()
-                                        hasShownNotificationRequest = true
-                                    } else {
-                                        sendWelcomeNotification(username)
-                                    }
-                                } else {
-                                    sendWelcomeNotification(username)
-                                }*/
                                 navController.navigate("${PitStopRoute.Home}/${newUser.username}")
                             }
                         }

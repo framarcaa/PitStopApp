@@ -60,7 +60,7 @@ fun LapTimeRow(index: Int, laptime: LapTime, userRepository: UserRepository) {
         1 -> Color(0xFFFFD700) // oro
         2 -> Color(0xFFC0C0C0) // argento
         3 -> Color(0xFFCD7F32) // bronzo
-        else -> Color.Black
+        else -> Color.DarkGray
     }
 
     Row(

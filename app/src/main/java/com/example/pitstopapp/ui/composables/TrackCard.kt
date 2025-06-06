@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +60,7 @@ fun TrackCard(
             Image(
                 painter = imagePainter,
                 contentDescription = "Track Image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp) // o la metà dell'altezza prevista della card
@@ -93,26 +95,6 @@ fun TrackCard(
                 ) {
                     Button(onClick = { onDetailsClick(track) }) {
                         Text(stringResource(R.string.details_screen_name))
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(onClick = {}) {
-                            Icon(Icons.Outlined.StarOutline, contentDescription = "Star")
-                        }
-                        /*Icon(
-                            if(isStar) Icons.Filled.Star else Icons.Outlined.StarOutline,
-                            contentDescription = if (isStar) "Favourite filled" else "Favourite",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable {
-                                    val newState = !isStar
-                                    isStar = newState
-                                    trackRepository.updateFavouriteStatus(track.id, userId, newState)
-                                }
-                        )*/
                     }
                 }
             }
