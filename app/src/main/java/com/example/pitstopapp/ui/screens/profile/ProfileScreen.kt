@@ -81,6 +81,8 @@ fun ProfileScreen(
     var location by remember { mutableStateOf("Non impostata") }
     var showDialog by remember { mutableStateOf(false) }
     var bestLaps by remember { mutableStateOf<List<BestLapResult>>(emptyList()) }
+    var cameraPermissionGranted by remember { mutableStateOf(false) }
+    var galleryPermissionGranted by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
@@ -97,16 +99,21 @@ fun ProfileScreen(
     fun requestImagePermissions() {
         val permissionsToRequest = mutableListOf<String>()
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        cameraPermissionGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        galleryPermissionGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        }
+
+        if (!cameraPermissionGranted) {
             permissionsToRequest.add(Manifest.permission.CAMERA)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+        if (!galleryPermissionGranted) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 permissionsToRequest.add(Manifest.permission.READ_MEDIA_IMAGES)
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            } else {
                 permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
@@ -115,6 +122,7 @@ fun ProfileScreen(
             permissionLauncher.launch(permissionsToRequest.toTypedArray())
         }
     }
+
 
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
@@ -289,8 +297,11 @@ fun ProfileScreen(
         ShowImageSelectionDialog(
             pickImageLauncher = pickImageLauncher,
             takePictureLauncher = takePictureLauncher,
-            onDismiss = { showDialog = false }
+            onDismiss = { showDialog = false },
+            cameraPermissionGranted = cameraPermissionGranted,
+            galleryPermissionGranted = galleryPermissionGranted
         )
+
     }
 }
 
@@ -298,7 +309,9 @@ fun ProfileScreen(
 fun ShowImageSelectionDialog(
     pickImageLauncher: ActivityResultLauncher<String>,
     takePictureLauncher: ActivityResultLauncher<Void?>,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    cameraPermissionGranted: Boolean,
+    galleryPermissionGranted: Boolean
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -314,22 +327,29 @@ fun ShowImageSelectionDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = {
-                takePictureLauncher.launch(null)
-                onDismiss()
-            }) {
+            TextButton(
+                onClick = {
+                    takePictureLauncher.launch(null)
+                    onDismiss()
+                },
+                enabled = cameraPermissionGranted
+            ) {
                 Text(stringResource(R.string.take_picture_button))
             }
         },
         dismissButton = {
-            TextButton(onClick = {
-                pickImageLauncher.launch("image/*")
-                onDismiss()
-            }) {
+            TextButton(
+                onClick = {
+                    pickImageLauncher.launch("image/*")
+                    onDismiss()
+                },
+                enabled = galleryPermissionGranted
+            ) {
                 Text(stringResource(R.string.gallery_button))
             }
         }
     )
+
 }
 
 fun copyImageToAppStorage(context: Context, uri: Uri): Uri {
