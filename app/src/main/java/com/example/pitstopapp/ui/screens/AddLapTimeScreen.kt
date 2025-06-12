@@ -53,7 +53,7 @@ fun AddLapTimeScreen(
         ) {
             val coroutineScope = rememberCoroutineScope()
             var lapTime by remember { mutableStateOf("") }
-            val isLapTimeValid = lapTime.matches(Regex("^\\d{2}\\.\\d{2}$"))
+            val isLapTimeValid = lapTime.matches(Regex("^\\d{2}\\.[0-5][0-9]$"))
 
             OutlinedTextField(
                 value = lapTime,

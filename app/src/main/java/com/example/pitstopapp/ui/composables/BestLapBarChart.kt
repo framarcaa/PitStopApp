@@ -104,7 +104,7 @@ fun BestLapBarChart(bestLaps: List<Pair<String, Float>>) {
 
                 // Etichetta tempo sopra la barra
                 drawContext.canvas.nativeCanvas.drawText(
-                    "${"%.2f".format(time)}s",
+                    "${"%.2f".format(time)}m",
                     x + barWidth / 2,
                     y - 10f,
                     android.graphics.Paint().apply {
@@ -128,7 +128,7 @@ fun BestLapBarChart(bestLaps: List<Pair<String, Float>>) {
                 val y = height - padding - ((value - minTime) / (maxTime - minTime)) * plotHeight
 
                 drawContext.canvas.nativeCanvas.drawText(
-                    "${"%.2f".format(value)}s",
+                    "${"%.2f".format(value)}m",
                     padding - 10f,
                     y + 10f,
                     android.graphics.Paint().apply {
